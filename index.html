@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Easy Gift</title>
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
     <style>
         :root {
+            /* Переменные из темы Telegram */
             --tg-bg: var(--tg-theme-bg-color, #1a1a1a);
             --tg-text: var(--tg-theme-text-color, #ffffff);
             --tg-hint: var(--tg-theme-hint-color, #999);
@@ -15,23 +18,120 @@
             --tg-button-text: var(--tg-theme-button-text-color, #ffffff);
             --tg-secondary-bg: var(--tg-theme-secondary-bg-color, #2c2c2e);
         }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 15px; background-color: var(--tg-bg); color: var(--tg-text); padding-bottom: 80px; box-sizing: border-box; }
-        .user-card { background-color: var(--tg-secondary-bg); border-radius: 12px; padding: 15px; display: flex; align-items: center; margin-bottom: 10px; }
-        .avatar { width: 44px; height: 44px; border-radius: 50%; margin-right: 12px; background-color: #555; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: var(--tg-bg);
+            color: var(--tg-text);
+            padding-bottom: 80px; 
+            box-sizing: border-box;
+        }
+
+        /* --- Карточки пользователя --- */
+        .user-card {
+            background-color: var(--tg-secondary-bg);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            margin-right: 12px;
+            background-color: #555; 
+        }
+
         .user-info { flex-grow: 1; }
         .user-name { font-size: 17px; font-weight: 600; }
         .user-subtext { font-size: 14px; color: var(--tg-hint); }
-        .stars-block { display: flex; align-items: center; color: var(--tg-hint); font-weight: 500; }
-        .stars-block .stars-count { background-color: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; }
+
+        /* --- Блок со звездами --- */
+        .stars-block {
+            display: flex;
+            align-items: center;
+            color: var(--tg-hint);
+            font-weight: 500;
+        }
+
+        .stars-block .stars-count {
+            background-color: rgba(0,0,0,0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
         .stars-block span { margin-left: 5px; }
-        .add-button { background-color: var(--tg-button); color: var(--tg-button-text); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 24px; font-weight: 500; line-height: 30px; text-align: center; margin-left: 10px; cursor: pointer; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--tg-secondary-bg); border-top: 1px solid rgba(150, 150, 150, 0.2); display: flex; justify-content: space-around; padding-top: 8px; padding-bottom: calc(env(safe-area-inset-bottom) + 8px); }
+        
+        .add-button {
+            background-color: var(--tg-button);
+            color: var(--tg-button-text);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 30px;
+            text-align: center;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        /* --- Нижнее меню --- */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background-color: var(--tg-secondary-bg); 
+            border-top: 1px solid rgba(150, 150, 150, 0.2); 
+            display: flex; 
+            justify-content: space-around; 
+            padding-top: 8px; 
+            padding-bottom: calc(env(safe-area-inset-bottom) + 8px); 
+        }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; font-size: 10px; color: var(--tg-hint); padding: 0 5px; }
         .nav-item.active { color: var(--tg-link); }
         .nav-icon { font-size: 24px; margin-bottom: 4px; }
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.6); display: none; align-items: flex-end; justify-content: center; z-index: 1000; }
-        .modal-content { background-color: var(--tg-secondary-bg); border-radius: 12px 12px 0 0; padding: 20px; width: 100%; max-width: 500px; box-sizing: border-box; position: relative; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 600; margin-bottom: 20px; }
+
+
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.6);
+            display: none; /* Скрыто по умолчанию */
+            align-items: flex-end; /* Прижимаем к низу */
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: var(--tg-secondary-bg);
+            border-radius: 12px 12px 0 0;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px; /* Для десктопа */
+            box-sizing: border-box;
+            position: relative;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
         .close-button { cursor: pointer; font-size: 28px; color: var(--tg-hint); line-height: 1; }
         .tabs { display: flex; margin-bottom: 20px; background-color: var(--tg-bg); border-radius: 8px; padding: 4px; }
         .tab { flex: 1; padding: 10px; text-align: center; border-radius: 6px; cursor: pointer; color: var(--tg-hint); font-weight: 500; }
@@ -40,41 +140,85 @@
         .input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--tg-hint); }
         .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--tg-bg); background-color: var(--tg-bg); color: var(--tg-text); font-size: 18px; box-sizing: border-box; }
         .input-group input[type="number"] { -moz-appearance: textfield; }
-        .input-group input::-webkit-outer-spin-button, .input-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .input-group input::-webkit-outer-spin-button,
+        .input-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .submit-button { width: 100%; padding: 15px; font-size: 17px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; background-color: var(--tg-button); color: var(--tg-button-text); }
     </style>
 </head>
 <body>
+
     <div class="user-card">
-        <img id="user-avatar-1" class...
+        <img id="user-avatar-1" class="avatar" src="" alt="avatar"> 
+        <div class="user-info">
+            <div id="user-name-1" class="user-name">...</div>
+            <div class="user-subtext"><span id="stars-balance">0</span> звёзд заработано</div>
+        </div>
+        <div class="stars-block">
+            <div class="stars-count">⭐ <span id="stars-balance-2">0</span></div>
+        </div>
+        <button class="add-button" id="open-modal-button">+</button>
     </div>
+
     <div class="modal-overlay" id="payment-modal">
-        ...
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Пополнение баланса</span>
+                <span class="close-button" id="close-modal-button">&times;</span>
+            </div>
+            <div class="tabs">
+                <div class="tab active">⭐ Звёзды</div>
+                <div class="tab">💎 TON <small>(скоро)</small></div>
+            </div>
+            <div class="input-group">
+                <label for="stars-amount">Введите сумму</label>
+                <input type="number" id="stars-amount" placeholder="500" inputmode="numeric">
+            </div>
+            <button class="submit-button" id="submit-payment-button">
+                Пополнить звёздами
+            </button>
+        </div>
     </div>
+    
     <nav class="bottom-nav">
-        ...
+        <a href="#" class="nav-item active"><span class="nav-icon">🏠</span>Главная</a>
+        <a href="#" class="nav-item"><span class="nav-icon">🔼</span>Апгрейд</a>
+        <a href="#" class="nav-item"><span class="nav-icon">🏆</span>Рейтинг</a>
+        <a href="#" class="nav-item"><span class="nav-icon">👤</span>Профиль</a>
+        <a href="#" class="nav-item"><span class="nav-icon">🕒</span>История</a>
     </nav>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             try {
+                // 1. Проверяем, загрузился ли скрипт
+                if (typeof window.Telegram.WebApp === 'undefined') {
+                    throw new Error('Объект window.Telegram.WebApp не найден. Скрипт Telegram (telegram-web-app.js) не загрузился.');
+                }
+
                 const tg = window.Telegram.WebApp;
-                tg.ready();
+                
+                // 2. Инициализируем
+                tg.ready(); 
                 tg.expand(); 
                 tg.BackButton.show(); 
                 tg.BackButton.onClick(() => tg.close());
 
-                // --- Авторизация (как и была) ---
-                const user = tg.initDataUnsafe.user;
-                if (user) {
-                    const userName = user.first_name || user.username || 'Пользователь';
-                    document.getElementById('user-name-1').innerText = userName;
-                    if (user.photo_url) {
-                        document.getElementById('user-avatar-1').src = user.photo_url;
-                    }
+                // 3. Проверяем, есть ли данные пользователя
+                if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
+                     throw new Error('Не найдены данные пользователя (initDataUnsafe). Вероятно, приложение открыто не в Telegram.');
                 }
 
-                // --- Модальное окно (как и было) ---
+                const user = tg.initDataUnsafe.user;
+
+                // 4. "Авторизация" (вставляем имя и аватар)
+                const userName = user.first_name || user.username || 'Пользователь';
+                document.getElementById('user-name-1').innerText = userName;
+                if (user.photo_url) {
+                    document.getElementById('user-avatar-1').src = user.photo_url;
+                }
+
+                // 5. Логика модального окна
                 const modal = document.getElementById('payment-modal');
                 const openButton = document.getElementById('open-modal-button');
                 const closeButton = document.getElementById('close-modal-button');
@@ -87,7 +231,7 @@
                     if (e.target === modal) modal.style.display = 'none';
                 });
 
-                // --- ОБНОВЛЕННАЯ ЛОГИКА ВЫЗОВА ОПЛАТЫ ---
+                // 6. Логика вызова оплаты (с отладкой)
                 submitButton.addEventListener('click', () => {
                     const amount = parseInt(amountInput.value);
 
@@ -99,46 +243,50 @@
                     const payload = `topup-${user.id}-${amount}-${Date.now()}`;
 
                     try {
-                        // 1. Вызываем нативный инвойс
                         tg.showInvoice({
                             type: 'stars',
                             payload: payload,
                             amount: amount 
                         }, 
-                        // 2. ОБНОВЛЕННЫЙ КОЛЛБЭК ДЛЯ ОТЛАДКИ
                         (status, invoice_payload) => {
                             console.log('Invoice callback status:', status);
 
                             if (status === 'paid') {
-                                // Этот код у вас не выполнится, т.к. бэкенд не получит PreCheckoutQuery
                                 tg.HapticFeedback.notificationOccurred('success');
                                 tg.showAlert('Оплата прошла успешно! Баланс обновлен.');
-                                // ... (код обновления баланса) ...
+                                const currentBalance = parseInt(document.getElementById('stars-balance').innerText) || 0;
+                                const newBalance = currentBalance + amount;
+                                document.getElementById('stars-balance').innerText = newBalance;
+                                document.getElementById('stars-balance-2').innerText = newBalance;
+                                modal.style.display = 'none';
+                                amountInput.value = '';
                             
                             } else if (status === 'failed') {
-                                // Скорее всего, вы увидите это
                                 tg.HapticFeedback.notificationOccurred('error');
                                 tg.showAlert(`Оплата не удалась. (Статус: ${status})`);
                             
                             } else if (status === 'cancelled') {
-                                // Или это
+                                // Это то, что вы увидите, если Stars не активированы
                                 tg.HapticFeedback.notificationOccurred('warning');
-                                tg.showAlert(`Оплата отменена. (Статус: ${status})`);
+                                tg.showAlert(`Оплата отменена. (Статус: ${status}). Возможно, Stars не активированы в @BotFather.`);
                             }
                         });
                     
                     } catch (error) {
-                        // 3. ДОБАВЛЕН БЛОК CATCH ДЛЯ ПЕРЕХВАТА ОШИБКИ
                         console.error('Ошибка вызова showInvoice:', error);
                         tg.showAlert(`Ошибка вызова showInvoice: ${error.message}`);
                     }
                 });
 
             } catch (e) {
+                // Показываем более детальную ошибку
                 console.error(e);
-                document.body.innerHTML = '<h2>Пожалуйста, откройте это приложение внутри Telegram.</h2>';
+                document.body.innerHTML = `<h2>Ошибка инициализации Mini App:</h2><p style="color: red; word-wrap: break-word;">${e.message}</p><p>Попробуйте полностью перезапустить Telegram (выгрузить из памяти) и очистить кэш.</p>`;
             }
         });
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
