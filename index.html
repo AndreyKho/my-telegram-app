@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Easy Gift</title>
-    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
@@ -51,7 +50,7 @@
         .user-name { font-size: 17px; font-weight: 600; }
         .user-subtext { font-size: 14px; color: var(--tg-hint); }
 
-        /* --- Блок со звездами --- */
+        /* --- Блок со звездами (изменен) --- */
         .stars-block {
             display: flex;
             align-items: center;
@@ -69,6 +68,7 @@
         
         .stars-block span { margin-left: 5px; }
         
+        /* НОВАЯ КНОПКА + */
         .add-button {
             background-color: var(--tg-button);
             color: var(--tg-button-text);
@@ -83,26 +83,15 @@
             margin-left: 10px;
             cursor: pointer;
         }
-
-        /* --- Нижнее меню --- */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            background-color: var(--tg-secondary-bg); 
-            border-top: 1px solid rgba(150, 150, 150, 0.2); 
-            display: flex; 
-            justify-content: space-around; 
-            padding-top: 8px; 
-            padding-bottom: calc(env(safe-area-inset-bottom) + 8px); 
-        }
+        
+        /* ... (остальные стили из прошлого примера: .empty-state, .bottom-nav, etc.) ... */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--tg-secondary-bg); border-top: 1px solid rgba(150, 150, 150, 0.2); display: flex; justify-content: space-around; padding-top: 8px; padding-bottom: calc(env(safe-area-inset-bottom) + 8px); }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; font-size: 10px; color: var(--tg-hint); padding: 0 5px; }
         .nav-item.active { color: var(--tg-link); }
         .nav-icon { font-size: 24px; margin-bottom: 4px; }
 
 
-        /* --- МОДАЛЬНОЕ ОКНО --- */
+        /* --- НОВЫЙ БЛОК: МОДАЛЬНОЕ ОКНО --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -115,6 +104,7 @@
             justify-content: center;
             z-index: 1000;
         }
+
         .modal-content {
             background-color: var(--tg-secondary-bg);
             border-radius: 12px 12px 0 0;
@@ -124,6 +114,7 @@
             box-sizing: border-box;
             position: relative;
         }
+        
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -132,17 +123,79 @@
             font-weight: 600;
             margin-bottom: 20px;
         }
-        .close-button { cursor: pointer; font-size: 28px; color: var(--tg-hint); line-height: 1; }
-        .tabs { display: flex; margin-bottom: 20px; background-color: var(--tg-bg); border-radius: 8px; padding: 4px; }
-        .tab { flex: 1; padding: 10px; text-align: center; border-radius: 6px; cursor: pointer; color: var(--tg-hint); font-weight: 500; }
-        .tab.active { background-color: var(--tg-secondary-bg); color: var(--tg-text); }
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--tg-hint); }
-        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--tg-bg); background-color: var(--tg-bg); color: var(--tg-text); font-size: 18px; box-sizing: border-box; }
-        .input-group input[type="number"] { -moz-appearance: textfield; }
+        
+        .close-button {
+            cursor: pointer;
+            font-size: 28px;
+            color: var(--tg-hint);
+            line-height: 1;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: var(--tg-bg);
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--tg-hint);
+            font-weight: 500;
+        }
+        .tab.active {
+            background-color: var(--tg-secondary-bg);
+            color: var(--tg-text);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--tg-hint);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--tg-bg);
+            background-color: var(--tg-bg);
+            color: var(--tg-text);
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+        
+        /* Стандартная numeric клавиатура, для простоты */
+        .input-group input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+        }
         .input-group input::-webkit-outer-spin-button,
-        .input-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .submit-button { width: 100%; padding: 15px; font-size: 17px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; background-color: var(--tg-button); color: var(--tg-button-text); }
+        .input-group input::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Chrome, Safari, Edge, Opera */
+            margin: 0;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 17px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: var(--tg-button);
+            color: var(--tg-button-text);
+        }
+
     </style>
 </head>
 <body>
@@ -158,21 +211,24 @@
         </div>
         <button class="add-button" id="open-modal-button">+</button>
     </div>
-
+    
     <div class="modal-overlay" id="payment-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span>Пополнение баланса</span>
                 <span class="close-button" id="close-modal-button">&times;</span>
             </div>
+
             <div class="tabs">
                 <div class="tab active">⭐ Звёзды</div>
                 <div class="tab">💎 TON <small>(скоро)</small></div>
             </div>
+
             <div class="input-group">
                 <label for="stars-amount">Введите сумму</label>
                 <input type="number" id="stars-amount" placeholder="500" inputmode="numeric">
             </div>
+
             <button class="submit-button" id="submit-payment-button">
                 Пополнить звёздами
             </button>
@@ -191,47 +247,45 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                // 1. Проверяем, загрузился ли скрипт
-                if (typeof window.Telegram.WebApp === 'undefined') {
-                    throw new Error('Объект window.Telegram.WebApp не найден. Скрипт Telegram (telegram-web-app.js) не загрузился.');
-                }
-
                 const tg = window.Telegram.WebApp;
-                
-                // 2. Инициализируем
-                tg.ready(); 
+                tg.ready();
                 tg.expand(); 
                 tg.BackButton.show(); 
                 tg.BackButton.onClick(() => tg.close());
 
-                // 3. Проверяем, есть ли данные пользователя
-                if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
-                     throw new Error('Не найдены данные пользователя (initDataUnsafe). Вероятно, приложение открыто не в Telegram.');
-                }
-
+                // --- Авторизация ---
                 const user = tg.initDataUnsafe.user;
-
-                // 4. "Авторизация" (вставляем имя и аватар)
-                const userName = user.first_name || user.username || 'Пользователь';
-                document.getElementById('user-name-1').innerText = userName;
-                if (user.photo_url) {
-                    document.getElementById('user-avatar-1').src = user.photo_url;
+                if (user) {
+                    const userName = user.first_name || user.username || 'Пользователь';
+                    document.getElementById('user-name-1').innerText = userName;
+                    if (user.photo_url) {
+                        document.getElementById('user-avatar-1').src = user.photo_url;
+                    }
                 }
 
-                // 5. Логика модального окна
+                // --- НОВАЯ ЛОГИКА: Модальное окно ---
                 const modal = document.getElementById('payment-modal');
                 const openButton = document.getElementById('open-modal-button');
                 const closeButton = document.getElementById('close-modal-button');
                 const submitButton = document.getElementById('submit-payment-button');
                 const amountInput = document.getElementById('stars-amount');
 
-                openButton.addEventListener('click', () => modal.style.display = 'flex');
-                closeButton.addEventListener('click', () => modal.style.display = 'none');
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) modal.style.display = 'none';
+                openButton.addEventListener('click', () => {
+                    modal.style.display = 'flex';
                 });
 
-                // 6. Логика вызова оплаты (с отладкой)
+                closeButton.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+                
+                // Закрытие по клику на фон
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+
+                // --- НОВАЯ ЛОГИКА: Вызов оплаты ---
                 submitButton.addEventListener('click', () => {
                     const amount = parseInt(amountInput.value);
 
@@ -240,51 +294,49 @@
                         return;
                     }
 
+                    // Уникальный ID платежа для вашего бэкенда
                     const payload = `topup-${user.id}-${amount}-${Date.now()}`;
 
-                    try {
-                        tg.showInvoice({
-                            type: 'stars',
-                            payload: payload,
-                            amount: amount 
-                        }, 
-                        (status, invoice_payload) => {
-                            console.log('Invoice callback status:', status);
+                    // 1. Вызываем нативный инвойс Telegram
+                    tg.showInvoice({
+                        type: 'stars',
+                        payload: payload,
+                        amount: amount // Сумма в звездах
+                    }, 
+                    // 2. Эта функция-коллбэк выполнится ПОСЛЕ того, 
+                    // как бэкенд обработает платеж
+                    (status, invoice_payload) => {
+                        console.log('Invoice callback:', status, invoice_payload);
 
-                            if (status === 'paid') {
-                                tg.HapticFeedback.notificationOccurred('success');
-                                tg.showAlert('Оплата прошла успешно! Баланс обновлен.');
-                                const currentBalance = parseInt(document.getElementById('stars-balance').innerText) || 0;
-                                const newBalance = currentBalance + amount;
-                                document.getElementById('stars-balance').innerText = newBalance;
-                                document.getElementById('stars-balance-2').innerText = newBalance;
-                                modal.style.display = 'none';
-                                amountInput.value = '';
+                        if (status === 'paid') {
+                            tg.HapticFeedback.notificationOccurred('success');
+                            tg.showAlert('Оплата прошла успешно! Баланс обновлен.');
                             
-                            } else if (status === 'failed') {
-                                tg.HapticFeedback.notificationOccurred('error');
-                                tg.showAlert(`Оплата не удалась. (Статус: ${status})`);
+                            // Обновляем баланс на UI (в реальном приложении - 
+                            // запросите новый баланс с бэкенда)
+                            const currentBalance = parseInt(document.getElementById('stars-balance').innerText) || 0;
+                            const newBalance = currentBalance + amount;
+                            document.getElementById('stars-balance').innerText = newBalance;
+                            document.getElementById('stars-balance-2').innerText = newBalance;
                             
-                            } else if (status === 'cancelled') {
-                                // Это то, что вы увидите, если Stars не активированы
-                                tg.HapticFeedback.notificationOccurred('warning');
-                                tg.showAlert(`Оплата отменена. (Статус: ${status}). Возможно, Stars не активированы в @BotFather.`);
-                            }
-                        });
-                    
-                    } catch (error) {
-                        console.error('Ошибка вызова showInvoice:', error);
-                        tg.showAlert(`Ошибка вызова showInvoice: ${error.message}`);
-                    }
+                            modal.style.display = 'none';
+                            amountInput.value = '';
+                        } else if (status === 'failed') {
+                            tg.HapticFeedback.notificationOccurred('error');
+                            tg.showAlert('Оплата не удалась. Попробуйте снова.');
+                        } else if (status === 'cancelled') {
+                            tg.HapticFeedback.notificationOccurred('warning');
+                        }
+                    });
                 });
 
             } catch (e) {
-                // Показываем более детальную ошибку
                 console.error(e);
-                document.body.innerHTML = `<h2>Ошибка инициализации Mini App:</h2><p style="color: red; word-wrap: break-word;">${e.message}</p><p>Попробуйте полностью перезапустить Telegram (выгрузить из памяти) и очистить кэш.</p>`;
+                document.body.innerHTML = '<h2>Пожалуйста, откройте это приложение внутри Telegram.</h2>';
             }
         });
     </script>
+
 </body>
 </html>
     </script>
